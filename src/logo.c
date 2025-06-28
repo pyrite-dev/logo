@@ -17,22 +17,23 @@ GLfloat lightblk[] = {0.0f, 0.0f, 0.0f, 1.0f};
 void display(void){
 	const float csz = 1.5;
 	const float sp = 0.5;
+	const float cm = 0.75;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glColor3ub(128, 0, 0);
+	glColor3f(cm, 0, 0);
 	glPushMatrix();
 	glTranslatef(0, sp, 0);
 	glutSolidCube(csz);
 	glPopMatrix();
 
-	glColor3ub(0, 128, 0);
+	glColor3f(0, cm, 0);
 	glPushMatrix();
 	glTranslatef(0, 0, sp);
 	glutSolidCube(csz);
 	glPopMatrix();
 
-	glColor3ub(0, 0, 128);
+	glColor3f(0, 0, cm);
 	glPushMatrix();
 	glTranslatef(sp, 0, 0);
 	glutSolidCube(csz);
