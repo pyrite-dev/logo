@@ -8,6 +8,8 @@ int ww = 256;
 int wh = 256;
 int once = 1;
 
+double rot = 0;
+
 GLfloat lightpos[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat lightwht[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat lightgry[] = {0.6f, 0.6f, 0.6f, 1.0f};
@@ -18,13 +20,16 @@ void display(void){
 	const float csz = 1.5;
 	const float sp = 0.5;
 	const float cm = 0.75;
+	const float csp = 0.001;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glPushMatrix();
+	glRotatef(rot, 0, 1, 0);
 	glColor3f(cm, 0, 0);
 	glPushMatrix();
-	glTranslatef(0, sp, 0);
-	glutSolidCube(csz);
+	glTranslatef(-csp / 2, sp - csp / 2, -csp / 2);
+	glutSolidCube(csz + csp);
 	glPopMatrix();
 
 	glColor3f(0, cm, 0);
@@ -37,6 +42,7 @@ void display(void){
 	glPushMatrix();
 	glTranslatef(sp, 0, 0);
 	glutSolidCube(csz);
+	glPopMatrix();
 	glPopMatrix();
 
 	glutSwapBuffers();
@@ -82,7 +88,7 @@ void resize(int w, int h){
 
 void keyboard(unsigned char key, int x, int y){
 	if(once) return;
-	switch (key) {
+	switch (key){
 		case 'q':
 		case 'Q':
 		case '\033':
@@ -92,14 +98,32 @@ void keyboard(unsigned char key, int x, int y){
 	}
 }
 
+void special(int key, int x, int y){
+	if(once) return;
+	switch(key){
+		case GLUT_KEY_LEFT:
+			rot -= 5;
+			break;
+		case GLUT_KEY_RIGHT:
+			rot += 5;
+			break;
+	}
+}
+
+void idle(void){
+	glutPostRedisplay();
+}
+
 int main(int argc, char** argv){
 	glutInitWindowSize(ww, wh);
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutCreateWindow(argv[0]);
 	glutDisplayFunc(display);
+	glutIdleFunc(idle);
 	glutReshapeFunc(resize);
 	glutKeyboardFunc(keyboard);
+	glutSpecialFunc(special);
 
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_LIGHTING);
